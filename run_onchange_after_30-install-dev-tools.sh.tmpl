@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+{{ template "brew-lib.sh.tmpl" . }}
+{{ template "proxy-lib.sh.tmpl" . }}
+
+os="{{ .chezmoi.os }}"
+role="{{ .role | default "" }}"
+
+setup_office_linux_proxy "$os" "$role"
+
+if ! resolve_brew_shellenv "$os"; then
+  echo "[chezmoi] brew not found. Run chezmoi apply again after Homebrew is installed." >&2
+  exit 1
+fi
+
+# Keep one unified formula list across macOS and Debian Linux (Linuxbrew).
+common_formulae=(
+  git
+  ripgrep
+  eza
+  bat
+  zsh
+  autojump
+  antigen
+  lazygit
+  goenv
+  pyenv
+  jq
+  htop
+  zstd
+  vim
+  unar
+)
+
+# Common casks should be installed on both macOS and Linux.
+common_casks=(
+  codex
+)
+
+macos_formulae=(
+)
+
+macos_casks=(
+  visual-studio-code
+  iterm2
+  orbstack
+  trae
+)
+
+formulae=("${common_formulae[@]}")
+if [[ "$os" == "darwin" ]]; then
+  formulae+=("${macos_formulae[@]}")
+fi
+
+echo "[chezmoi] Installing developer tools (formulae) with Homebrew..."
+for pkg in "${formulae[@]}"; do
+  if brew list --formula "$pkg" >/dev/null 2>&1; then
+    echo "[chezmoi] $pkg already installed"
+  else
+    echo "[chezmoi] brew install $pkg"
+    brew install "$pkg"
+  fi
+done
+
+echo "[chezmoi] Installing common casks with Homebrew..."
+for cask in "${common_casks[@]}"; do
+  if brew list --cask "$cask" >/dev/null 2>&1; then
+    echo "[chezmoi] $cask already installed"
+  else
+    echo "[chezmoi] brew install --cask $cask"
+    brew install --cask "$cask"
+  fi
+done
+
+if [[ "$os" == "darwin" ]]; then
+  echo "[chezmoi] Installing macOS-only casks with Homebrew..."
+  for cask in "${macos_casks[@]}"; do
+    if brew list --cask "$cask" >/dev/null 2>&1; then
+      echo "[chezmoi] $cask already installed"
+    else
+      echo "[chezmoi] brew install --cask $cask"
+      brew install --cask "$cask"
+    fi
+  done
+fi

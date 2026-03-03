@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+{{ template "brew-lib.sh.tmpl" . }}
+{{ template "proxy-lib.sh.tmpl" . }}
+
+os="{{ .chezmoi.os }}"
+role="{{ .role | default "" }}"
+
+install_linux_brew_dependencies() {
+  if [[ "$os" != "linux" ]]; then
+    return
+  fi
+
+  if ! command -v apt >/dev/null 2>&1; then
+    echo "[chezmoi] apt not found, cannot install Linuxbrew prerequisites" >&2
+    exit 1
+  fi
+
+  echo "[chezmoi] Installing Linuxbrew prerequisites with apt..."
+  sudo apt -y update
+  sudo apt install -y build-essential procps curl file git
+}
+
+if ! is_supported_brew_os "$os"; then
+  echo "[chezmoi] Unsupported OS for Homebrew bootstrap: $os" >&2
+  exit 1
+fi
+
+if command -v brew >/dev/null 2>&1; then
+  echo "[chezmoi] Homebrew already installed: $(brew --version | head -n1)"
+  exit 0
+fi
+
+setup_office_linux_proxy "$os" "$role"
+install_linux_brew_dependencies
+
+echo "[chezmoi] Installing Homebrew on $os..."
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+if ! resolve_brew_shellenv "$os"; then
+  echo "[chezmoi] Homebrew installation finished, but brew is not in PATH yet." >&2
+  echo "[chezmoi] Open a new shell and run: chezmoi apply" >&2
+  exit 1
+fi
+
+echo "[chezmoi] Homebrew ready: $(brew --version | head -n1)"

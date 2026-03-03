@@ -1,0 +1,6 @@
+# Copy this file to ~/.config/chezmoi/chezmoi.toml and adjust per machine.
+
+[data]
+# office | home
+role = "office"
+machine_name = "macbook-pro"

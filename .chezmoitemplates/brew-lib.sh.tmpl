@@ -1,0 +1,48 @@
+# Shared Homebrew helper functions for chezmoi run scripts.
+
+is_supported_brew_os() {
+  local target_os="$1"
+  [[ "$target_os" == "darwin" || "$target_os" == "linux" ]]
+}
+
+brew_candidates_for_os() {
+  local target_os="$1"
+
+  case "$target_os" in
+    darwin)
+      printf '%s\n' \
+        /opt/homebrew/bin/brew \
+        /usr/local/bin/brew
+      ;;
+    linux)
+      printf '%s\n' \
+        /home/linuxbrew/.linuxbrew/bin/brew \
+        "$HOME/.linuxbrew/bin/brew"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+resolve_brew_shellenv() {
+  local target_os="$1"
+
+  if command -v brew >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if ! is_supported_brew_os "$target_os"; then
+    return 1
+  fi
+
+  local brew_bin
+  while IFS= read -r brew_bin; do
+    if [[ -x "$brew_bin" ]]; then
+      eval "$("$brew_bin" shellenv)"
+      break
+    fi
+  done < <(brew_candidates_for_os "$target_os")
+
+  command -v brew >/dev/null 2>&1
+}

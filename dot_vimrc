@@ -1,0 +1,27 @@
+let mapleader=","
+
+nmap ; :
+" 默认使用系统剪切板功能
+noremap <Leader>y "*y
+noremap <Leader>p "*p
+
+"窗口快捷导航
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+
+
+" ===== 个性化配置
+" 开启行号
+set number
+" 语法高亮
+syntax enable
+set background=dark
+
+" 十字光标
+set cursorline cursorcolumn
+" 代码换行
+set nowrap
+" 搜索高亮
+set hlsearch

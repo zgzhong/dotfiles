@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+role="{{ .role | default "" }}"
+
+if [[ -z "$role" ]]; then
+  echo "[chezmoi] ERROR: data.role is required in ~/.config/chezmoi/chezmoi.toml" >&2
+  echo "[chezmoi] Allowed values: office, home" >&2
+  exit 1
+fi
+
+case "$role" in
+  office|home)
+    ;;
+  *)
+    echo "[chezmoi] ERROR: invalid data.role '$role'" >&2
+    echo "[chezmoi] Allowed values: office, home" >&2
+    exit 1
+    ;;
+esac

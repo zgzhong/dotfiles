@@ -1,0 +1,19 @@
+# Shared proxy helper functions for chezmoi run scripts.
+
+setup_office_linux_proxy() {
+  local target_os="${1:-}"
+  local target_role="${2:-}"
+
+  if [[ "$target_os" == "linux" && "$target_role" == "office" ]]; then
+    export http_proxy="http://sys-proxy-rd-relay.byted.org:8118"
+    export https_proxy="http://sys-proxy-rd-relay.byted.org:8118"
+    export no_proxy=".byted.org"
+
+    # Keep uppercase aliases for tools that don't read lowercase vars.
+    export HTTP_PROXY="$http_proxy"
+    export HTTPS_PROXY="$https_proxy"
+    export NO_PROXY="$no_proxy"
+
+    echo "[chezmoi] office+linux detected, proxy exported for network operations"
+  fi
+}
