@@ -47,7 +47,7 @@ Common (`brew --formula`, macOS + Linux):
 - `bat`
 - `zsh`
 - `autojump`
-- `antigen`
+- `antidote`
 - `lazygit`
 - `goenv`
 - `pyenv`
@@ -65,13 +65,6 @@ macOS only (`brew --cask`):
 - `iterm2`
 - `orbstack`
 - `trae`
-
-Note:
-- Unlike the previous `install.sh`, tool installation is unified on Homebrew for both macOS and Debian Linux.
-- For `office + linux`, Homebrew bootstrap will temporarily export the same proxy used in the old `install.sh`.
-- On Linux, Homebrew bootstrap first runs:
-  - `sudo apt -y update`
-  - `sudo apt install -y build-essential procps curl file git`
 
 ## Migration from stow
 Use incremental migration. Move one config family at a time.
@@ -95,4 +88,17 @@ tests/integration/run-linux-office.sh
 Optional env vars:
 - `IMAGE_TAG`: docker image tag (default: `dotfiles-it:linux-office`)
 - `DOTFILES_SRC`: source directory mounted to `/workspace` in the container
-- `KEEP_CONTAINER=1`: keep container after failure for debugging
+- `CONTAINER_NAME`: docker container name (default: `dotfiles-it-linux-office`)
+- `STATUS_FILE`: file inside the container used to store the e2e exit code (default: `/tmp/dotfiles-e2e.exitcode`)
+
+The script keeps the latest test container running for debugging and removes any existing container with the same name before starting a new run. The script still exits with the real e2e result code. To inspect the environment after a run:
+
+```bash
+docker exec -it dotfiles-it-linux-office bash
+```
+
+If the e2e run has already installed Homebrew formulae, `zsh` is also available:
+
+```bash
+docker exec -it dotfiles-it-linux-office zsh
+```

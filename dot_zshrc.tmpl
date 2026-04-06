@@ -1,0 +1,27 @@
+# shellcheck shell=zsh
+# Managed by chezmoi. Interactive zsh configuration.
+
+[[ -o interactive ]] || return 0
+
+# Load chezmoi-managed environment variables (DOTFILES_ROLE, DOTFILES_OS, etc.)
+if [[ -f "$HOME/.config/shell/env" ]]; then
+  . "$HOME/.config/shell/env"
+fi
+
+# --- antidote plugin manager ---
+if command -v brew >/dev/null 2>&1; then
+  antidote_file="$(brew --prefix antidote 2>/dev/null)/share/antidote/antidote.zsh"
+  if [[ -f "$antidote_file" ]]; then
+    . "$antidote_file"
+    antidote load "$HOME/.zsh_plugins.txt"
+  fi
+fi
+
+# --- completions ---
+autoload -Uz compinit
+compinit -u
+
+# --- pure prompt ---
+autoload -Uz promptinit
+promptinit
+prompt pure
