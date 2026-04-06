@@ -16,10 +16,11 @@ FORMULAE=(
   bat
   zsh
   autojump
-  antigen
+  antidote
   lazygit
   goenv
   pyenv
+  d-kuro/tap/gwq
   jq
   htop
   zstd
@@ -122,6 +123,7 @@ for pkg in "${FORMULAE[@]}"; do
   fi
 done
 
+
 phase "validate common casks"
 if brew list --cask codex >/dev/null 2>&1; then
   echo "[OK] cask installed: codex"
@@ -139,6 +141,20 @@ assert_file_not_contains "$HOME/.config/shell/env" 'DOTFILES_HOME_CONTEXT'
 
 assert_file_contains "$HOME/.vimrc" 'let mapleader=","'
 assert_file_contains "$HOME/.vimrc" 'set number'
+assert_file_contains "$HOME/.zshenv" '/home/linuxbrew/.linuxbrew/bin/brew'
+assert_file_contains "$HOME/.zshenv" 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+assert_file_contains "$HOME/.zshrc" 'antidote'
+assert_file_contains "$HOME/.zsh_plugins.txt" 'zsh-users/zsh-autosuggestions'
+assert_file_contains "$HOME/.zsh_plugins.txt" 'zsh-users/zsh-syntax-highlighting'
+assert_file_contains "$HOME/.zsh_plugins.txt" 'sindresorhus/pure'
+assert_file_contains "$HOME/.zsh_plugins.txt" 'zsh-users/zsh-completions'
+assert_file_contains "$HOME/.zshrc" 'prompt pure'
+
+phase "validate zsh non-interactive startup"
+run_step "zsh-non-interactive-smoke" zsh -c 'command -v brew >/dev/null && command -v zsh >/dev/null && command -v lazygit >/dev/null'
+
+phase "validate zsh startup"
+run_step "zsh-smoke" zsh -ic 'command -v antidote >/dev/null && [[ -n "${DOTFILES_ROLE:-}" ]] && [[ -n "${DOTFILES_OS:-}" ]] && (( ${+functions[prompt_pure_setup]} ))'
 
 run_step "chezmoi-apply-second" chezmoi -S "$WORKSPACE" apply -v
 run_step "chezmoi-diff" chezmoi -S "$WORKSPACE" diff

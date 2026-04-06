@@ -4,6 +4,9 @@ ARG USERNAME=tester
 ARG USER_UID=1000
 ARG USER_GID=1000
 
+# Use internal mirror for faster apt in office network
+RUN sed -i 's|deb.debian.org|mirrors.byted.org|g' /etc/apt/sources.list.d/debian.sources
+
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     sudo \

@@ -18,7 +18,7 @@ Symptom:
 
 Fix:
 1. Run `chezmoi apply` once to trigger `run_once_before_20-install-homebrew.sh.tmpl`.
-2. Open a new shell so brew shellenv is loaded.
+2. Open a new `zsh` so the managed `~/.zshenv` can load `brew shellenv`.
 3. Run `chezmoi apply` again.
 
 ## Linux bootstrap asks for sudo
