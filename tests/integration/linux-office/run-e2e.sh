@@ -18,8 +18,7 @@ FORMULAE=(
   autojump
   antidote
   lazygit
-  goenv
-  pyenv
+  mise
   d-kuro/tap/gwq
   jq
   htop
@@ -149,6 +148,15 @@ assert_file_contains "$HOME/.zsh_plugins.txt" 'zsh-users/zsh-syntax-highlighting
 assert_file_contains "$HOME/.zsh_plugins.txt" 'sindresorhus/pure'
 assert_file_contains "$HOME/.zsh_plugins.txt" 'zsh-users/zsh-completions'
 assert_file_contains "$HOME/.zshrc" 'prompt pure'
+assert_file_contains "$HOME/.zshrc" "alias lg='lazygit'"
+assert_file_contains "$HOME/.zshrc" "alias ls='eza -FTh -s type -L1'"
+assert_file_contains "$HOME/.zshrc" 'alias s='
+assert_file_contains "$HOME/.zshrc" 'alias k='
+assert_file_contains "$HOME/.zshrc" 'export EDITOR=vim'
+assert_file_contains "$HOME/.zshrc" 'no_proxy='
+assert_file_contains "$HOME/.zshrc" 'mise activate zsh'
+assert_file_contains "$HOME/.zshrc" 'GOROOT'
+assert_file_contains "$HOME/.zshrc" 'gwq completion zsh'
 
 phase "validate zsh non-interactive startup"
 run_step "zsh-non-interactive-smoke" zsh -c 'command -v brew >/dev/null && command -v zsh >/dev/null && command -v lazygit >/dev/null'

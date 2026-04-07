@@ -25,3 +25,52 @@ compinit -u
 autoload -Uz promptinit
 promptinit
 prompt pure
+
+# --- aliases ---
+alias cls='clear'
+alias ls='eza -FTh -s type -L1'
+alias ll='ls -l'
+alias sl='ls'
+alias la='ls -a'
+alias grep="rg --color=auto -glob='!.{.bzr,git,hg,idea,vscode}'"
+alias gerp='grep'
+alias lg='lazygit'
+alias vi='vim'
+
+{{ if eq .role "office" -}}
+# --- office-only aliases ---
+alias s='ssh -K zhongzegeng@BYTEDANCE.COM'
+alias k='kinit --keychain zhongzegeng@BYTEDANCE.COM'
+{{- end }}
+
+# --- environment ---
+export LC_TIME="en_US.UTF-8"
+export EDITOR=vim
+
+{{ if eq .role "office" -}}
+# --- office proxy ---
+export no_proxy="localhost,.byted.org,byted.org,.bytedance.net,bytedance.net,.byteintl.net,byteintl.net,127.0.0.1,127.0.0.0/8,169.254.0.0/16,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8,::1,fe80::/10,fd00::/8"
+
+set_proxy() {
+  export http_proxy=http://sys-proxy-rd-relay.byted.org:8118 \
+         https_proxy=http://sys-proxy-rd-relay.byted.org:8118
+}
+
+unset_proxy() {
+  unset http_proxy https_proxy no_proxy
+}
+{{- end }}
+
+# --- mise (language SDK manager) ---
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
+# --- PATH ---
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"
+
+# --- completions (tools) ---
+if command -v gwq >/dev/null 2>&1; then
+  source <(gwq completion zsh)
+fi
