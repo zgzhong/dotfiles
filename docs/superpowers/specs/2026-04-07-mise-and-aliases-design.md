@@ -37,7 +37,7 @@ All new content is appended after the existing `prompt pure` line. Order:
 
 ```zsh
 alias cls='clear'
-alias ls='eza -FTh -s type -L1'
+alias ls='eza -Th -s type -L1'
 alias ll='ls -l'
 alias sl='ls'
 alias la='ls -a'

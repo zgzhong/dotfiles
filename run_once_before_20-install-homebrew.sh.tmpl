@@ -19,7 +19,14 @@ install_linux_brew_dependencies() {
 
   echo "[chezmoi] Installing Linuxbrew prerequisites with apt..."
   sudo apt -y update
-  sudo apt install -y build-essential procps curl file git
+  sudo apt install -y build-essential procps curl file git locales
+
+  # Generate en_US.UTF-8 locale
+  if ! locale -a 2>/dev/null | grep -q 'en_US.utf8'; then
+    echo "[chezmoi] Generating en_US.UTF-8 locale..."
+    sudo sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    sudo locale-gen
+  fi
 }
 
 if ! is_supported_brew_os "$os"; then

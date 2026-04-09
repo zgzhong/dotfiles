@@ -73,7 +73,7 @@ Add the following content after line 27 (`prompt pure`):
 
 # --- aliases ---
 alias cls='clear'
-alias ls='eza -FTh -s type -L1'
+alias ls='eza -Th -s type -L1'
 alias ll='ls -l'
 alias sl='ls'
 alias la='ls -a'
@@ -183,7 +183,7 @@ After the existing `assert_file_contains "$HOME/.zshrc" 'prompt pure'` line (lin
 
 ```bash
 assert_file_contains "$HOME/.zshrc" "alias lg='lazygit'"
-assert_file_contains "$HOME/.zshrc" "alias ls='eza -FTh -s type -L1'"
+assert_file_contains "$HOME/.zshrc" "alias ls='eza -Th -s type -L1'"
 assert_file_contains "$HOME/.zshrc" 'alias s='
 assert_file_contains "$HOME/.zshrc" 'alias k='
 assert_file_contains "$HOME/.zshrc" 'export EDITOR=vim'

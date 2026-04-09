@@ -1,6 +1,10 @@
 # shellcheck shell=zsh
 # Managed by chezmoi. Sourced by every zsh invocation (login, interactive, scripts).
 
+# Locale
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+
 # Homebrew
 {{- if eq .chezmoi.os "darwin" }}
 if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -15,6 +19,9 @@ elif [[ -x "$HOME/.linuxbrew/bin/brew" ]]; then
   eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
 fi
 {{- end }}
+
+# Go — shared binary directory across mise-managed Go versions
+export GOBIN="$HOME/go/bin"
 
 # Rust
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"

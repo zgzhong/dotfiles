@@ -36,7 +36,7 @@ prompt pure
 
 # --- aliases ---
 alias cls='clear'
-alias ls='eza -FTh -s type -L1'
+alias ls='eza -Th -s type -L1'
 alias ll='ls -l'
 alias sl='ls'
 alias la='ls -a'
@@ -56,6 +56,7 @@ export LC_TIME="en_US.UTF-8"
 export EDITOR=vim
 {{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
 export CODEX_HOME="$HOME/.codex"
+[[ -d "$CODEX_HOME" ]] || mkdir -p "$CODEX_HOME"
 {{- end }}
 
 {{ if eq .role "office" -}}
@@ -84,8 +85,7 @@ if command -v mise >/dev/null 2>&1; then
 fi
 
 # --- PATH ---
-export PATH="$GOROOT/bin:$PATH"
-export PATH="$PATH:$GOPATH/bin"
+export PATH="$GOBIN:$PATH"
 
 {{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
 # --- system PATH (office + linux) ---
