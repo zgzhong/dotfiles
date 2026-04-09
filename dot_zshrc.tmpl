@@ -115,6 +115,11 @@ claude() {
   command "${HOMEBREW_PREFIX}/bin/claude" "$@"
 }
 
+{{ if eq .role "office" -}}
+# --- goproxy token auto-renewal ---
+[[ -x "$HOME/.local/bin/goproxy-token-check" ]] && "$HOME/.local/bin/goproxy-token-check"
+{{- end }}
+
 # --- codex completion ---
 if command -v codex >/dev/null 2>&1; then
   source <(codex completion zsh)

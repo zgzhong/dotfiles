@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+{{ template "brew-lib.sh.tmpl" . }}
+{{ template "proxy-lib.sh.tmpl" . }}
+
+os="{{ .chezmoi.os }}"
+role="{{ .role | default "" }}"
+
+if [[ "$role" != "office" ]]; then
+  echo "[chezmoi] goproxy setup is office-only, skipping"
+  exit 0
+fi
+
+setup_office_linux_proxy "$os" "$role"
+
+if ! resolve_brew_shellenv "$os"; then
+  echo "[chezmoi] brew not found, cannot proceed" >&2
+  exit 1
+fi
+
+# --- Install Go via mise ---
+if ! command -v mise >/dev/null 2>&1; then
+  echo "[chezmoi] mise not found, cannot install Go" >&2
+  exit 1
+fi
+
+echo "[chezmoi] Installing Go 1.24 via mise..."
+mise use -g go@1.24
+eval "$(mise activate bash)"
+
+if ! command -v go >/dev/null 2>&1; then
+  echo "[chezmoi] go not found after mise install" >&2
+  exit 1
+fi
+echo "[chezmoi] Go version: $(go version)"
+
+# --- Download goproxy_setup_cli ---
+mkdir -p "$HOME/.local/bin"
+GOPROXY_CLI="$HOME/.local/bin/goproxy_setup_cli"
+
+if [[ ! -x "$GOPROXY_CLI" ]]; then
+  {{ if eq .chezmoi.os "linux" -}}
+  GOPROXY_URL="https://luban-source.byted.org/repository/asset/test/goproxy_setup_cli/goproxy_setup_cli_linux_amd64"
+  {{ else if eq .chezmoi.os "darwin" -}}
+  GOPROXY_URL="https://luban-source.byted.org/repository/asset/test/goproxy_setup_cli/goproxy_setup_cli_darwin_arm64"
+  {{ end -}}
+  echo "[chezmoi] Downloading goproxy_setup_cli..."
+  if curl -fsSL "$GOPROXY_URL" -o "$GOPROXY_CLI"; then
+    chmod +x "$GOPROXY_CLI"
+    echo "[chezmoi] goproxy_setup_cli installed to $GOPROXY_CLI"
+  else
+    echo "[chezmoi] Warning: Could not download goproxy_setup_cli (network issue?), skipping"
+    rm -f "$GOPROXY_CLI"
+  fi
+else
+  echo "[chezmoi] goproxy_setup_cli already installed"
+fi
+
+# --- Configure Go proxy ---
+echo "[chezmoi] Configuring Go proxy environment..."
+go env -w \
+  GOPRIVATE="gitlab.everphoto.cn,sysrepo.byted.org" \
+  GONOSUMDB='*.byted.org' \
+  GOPROXY='https://goproxy.byted.org|direct' \
+  GONOPROXY='gitlab.everphoto.cn,sysrepo.byted.org'
+
+echo "[chezmoi] Go proxy setup complete"

@@ -1,3 +1,6 @@
 {{ if not (and (eq .role "office") (eq .chezmoi.os "linux")) }}
 .tmux.conf
 {{ end }}
+{{ if ne .role "office" }}
+.local/bin/goproxy-token-check
+{{ end }}

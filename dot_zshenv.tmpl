@@ -28,7 +28,7 @@ export RUSTUP_DIST_SERVER="https://rsproxy.cn"
 export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
-{{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
+{{ if eq .role "office" -}}
 # local bin
 export PATH="$HOME/.local/bin:$PATH"
 {{- end }}
