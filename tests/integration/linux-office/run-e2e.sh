@@ -150,6 +150,35 @@ else
   fi
 fi
 
+phase "validate go installation"
+eval "$(mise activate bash)"
+if command -v go >/dev/null 2>&1; then
+  echo "[OK] go installed: $(go version)"
+else
+  echo "[ERROR] go not found after chezmoi apply" >&2
+  dump_debug
+  exit 1
+fi
+
+phase "validate go proxy config"
+GOPROXY_VAL=$(go env GOPROXY)
+if [[ "$GOPROXY_VAL" == *"goproxy.byted.org"* ]]; then
+  echo "[OK] GOPROXY configured: $GOPROXY_VAL"
+else
+  echo "[ERROR] GOPROXY not configured correctly: $GOPROXY_VAL" >&2
+  dump_debug
+  exit 1
+fi
+
+GOPRIVATE_VAL=$(go env GOPRIVATE)
+if [[ "$GOPRIVATE_VAL" == *"gitlab.everphoto.cn"* ]]; then
+  echo "[OK] GOPRIVATE configured: $GOPRIVATE_VAL"
+else
+  echo "[ERROR] GOPRIVATE not configured correctly: $GOPRIVATE_VAL" >&2
+  dump_debug
+  exit 1
+fi
+
 phase "validate rendered files"
 assert_file_contains "$HOME/.config/shell/env" 'export DOTFILES_ROLE="office"'
 assert_file_contains "$HOME/.config/shell/env" 'export DOTFILES_OS="linux"'
@@ -202,6 +231,11 @@ assert_file_contains "$HOME/.zshrc" 'CODEX_HOME'
 assert_file_contains "$HOME/.zshrc" '.zsh/completions'
 assert_file_contains "$HOME/.zshrc" 'zoxide init zsh'
 assert_file_contains "$HOME/.zsh_plugins.txt" 'ohmyzsh/ohmyzsh'
+assert_file_contains "$HOME/.zshrc" 'goproxy-token-check'
+assert_file_exists "$HOME/.local/bin/goproxy-token-check"
+assert_file_contains "$HOME/.local/bin/goproxy-token-check" 'goproxy.byted.org'
+assert_file_contains "$HOME/.local/bin/goproxy-token-check" 'goproxy_setup_cli'
+assert_file_contains "$HOME/.local/bin/goproxy-token-check" 'Renew now?'
 
 phase "validate zsh non-interactive startup"
 run_step "zsh-non-interactive-smoke" zsh -c 'command -v brew >/dev/null && command -v zsh >/dev/null && command -v lazygit >/dev/null'

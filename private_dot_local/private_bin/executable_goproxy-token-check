@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Goproxy JWT token check — prompts SSO renewal when token is missing or near expiry.
+# Called from ~/.zshrc on interactive shell startup (office only).
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLI="${SCRIPT_DIR}/goproxy_setup_cli"
+
+# Silently skip if goproxy_setup_cli is not installed
+[[ -x "$CLI" ]] || exit 0
+
+NETRC="$HOME/.netrc"
+TOKEN=""
+
+if [[ -f "$NETRC" ]]; then
+  TOKEN=$(awk '/machine goproxy\.byted\.org/{found=1} found && /password/{print $2; exit}' "$NETRC")
+fi
+
+prompt_login() {
+  local message="$1"
+  local action="${2:-Run SSO login now?}"
+  echo "$message"
+  printf "[goproxy] %s [Y/n] " "$action"
+  read -r reply </dev/tty
+  if [[ "$reply" =~ ^[Nn] ]]; then
+    exit 0
+  fi
+  "$CLI" login
+}
+
+if [[ -z "$TOKEN" ]]; then
+  prompt_login "[goproxy] No token found for goproxy.byted.org"
+  exit 0
+fi
+
+# Decode JWT payload (base64url -> base64 -> json)
+B64=$(echo "$TOKEN" | cut -d. -f2)
+case $(( ${#B64} % 4 )) in
+  2) B64="${B64}==" ;;
+  3) B64="${B64}=" ;;
+esac
+PAYLOAD=$(echo "$B64" | tr '_-' '/+' | { base64 -d 2>/dev/null || base64 -D 2>/dev/null; })
+EXP_TS=$(echo "$PAYLOAD" | jq -r '.exp' 2>/dev/null)
+
+if [[ -z "$EXP_TS" || "$EXP_TS" == "null" ]]; then
+  prompt_login "[goproxy] Cannot parse token"
+  exit 0
+fi
+
+NOW=$(date +%s)
+DAYS_LEFT=$(( (EXP_TS - NOW) / 86400 ))
+
+if (( DAYS_LEFT <= 10 )); then
+  EXP_DATE=$(date -d "@$EXP_TS" '+%Y-%m-%d' 2>/dev/null || date -r "$EXP_TS" '+%Y-%m-%d' 2>/dev/null)
+  if (( DAYS_LEFT > 0 )); then
+    prompt_login "[goproxy] Token expires on ${EXP_DATE} (${DAYS_LEFT} days left)" "Renew now?"
+  else
+    prompt_login "[goproxy] Token has expired (was ${EXP_DATE})" "Renew now?"
+  fi
+fi
