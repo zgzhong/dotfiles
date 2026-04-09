@@ -1,0 +1,20 @@
+# Managed by chezmoi.
+[user]
+	name = ZhongZegeng
+{{ if eq .role "office" -}}
+	email = zhongzegeng@bytedance.com
+{{ else -}}
+	email = zhong550413470@gmail.com
+{{ end }}
+{{ if eq .role "office" -}}
+[url "git@code.byted.org:"]
+	insteadOf = https://code.byted.org/
+{{ end -}}
+[safe]
+	directory = *
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

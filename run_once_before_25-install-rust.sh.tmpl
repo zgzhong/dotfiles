@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+{{ template "proxy-lib.sh.tmpl" . }}
+
+os="{{ .chezmoi.os }}"
+role="{{ .role | default "" }}"
+
+setup_office_linux_proxy "$os" "$role"
+
+# Rust mirrors (China mainland acceleration)
+export RUSTUP_DIST_SERVER="https://rsproxy.cn"
+export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
+
+if command -v rustup >/dev/null 2>&1; then
+  echo "[chezmoi] Rust already installed: $(rustup --version)"
+  exit 0
+fi
+
+# Also check if rustup is in cargo bin but not yet in PATH
+if [[ -x "$HOME/.cargo/bin/rustup" ]]; then
+  echo "[chezmoi] Rust already installed: $($HOME/.cargo/bin/rustup --version)"
+  exit 0
+fi
+
+echo "[chezmoi] Installing Rust via rustup..."
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+echo "[chezmoi] Rust installed: $($HOME/.cargo/bin/rustup --version)"

@@ -15,7 +15,7 @@ FORMULAE=(
   eza
   bat
   zsh
-  autojump
+  zoxide
   antidote
   lazygit
   mise
@@ -25,6 +25,8 @@ FORMULAE=(
   zstd
   vim
   unar
+  fzf
+  fd
 )
 
 resolve_brew_shellenv_local() {
@@ -131,6 +133,22 @@ else
   dump_debug
   exit 1
 fi
+# claude cask is macOS-only, skip on Linux
+
+phase "validate rust installation"
+if command -v rustc >/dev/null 2>&1; then
+  echo "[OK] rustc installed: $(rustc --version)"
+else
+  # Source cargo env in case PATH isn't set yet
+  [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+  if command -v rustc >/dev/null 2>&1; then
+    echo "[OK] rustc installed (after sourcing cargo/env): $(rustc --version)"
+  else
+    echo "[ERROR] rustc not found after chezmoi apply" >&2
+    dump_debug
+    exit 1
+  fi
+fi
 
 phase "validate rendered files"
 assert_file_contains "$HOME/.config/shell/env" 'export DOTFILES_ROLE="office"'
@@ -142,6 +160,9 @@ assert_file_contains "$HOME/.vimrc" 'let mapleader=","'
 assert_file_contains "$HOME/.vimrc" 'set number'
 assert_file_contains "$HOME/.zshenv" '/home/linuxbrew/.linuxbrew/bin/brew'
 assert_file_contains "$HOME/.zshenv" 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+assert_file_contains "$HOME/.zshenv" 'RUSTUP_DIST_SERVER'
+assert_file_contains "$HOME/.zshenv" 'cargo/env'
+assert_file_contains "$HOME/.zshenv" '.local/bin'
 assert_file_contains "$HOME/.zshrc" 'antidote'
 assert_file_contains "$HOME/.zsh_plugins.txt" 'zsh-users/zsh-autosuggestions'
 assert_file_contains "$HOME/.zsh_plugins.txt" 'zsh-users/zsh-syntax-highlighting'
@@ -157,6 +178,29 @@ assert_file_contains "$HOME/.zshrc" 'no_proxy='
 assert_file_contains "$HOME/.zshrc" 'mise activate zsh'
 assert_file_contains "$HOME/.zshrc" 'GOROOT'
 assert_file_contains "$HOME/.zshrc" 'gwq completion zsh'
+assert_file_contains "$HOME/.gitconfig" 'name = ZhongZegeng'
+assert_file_contains "$HOME/.gitconfig" 'email = zhongzegeng@bytedance.com'
+assert_file_contains "$HOME/.gitconfig" 'insteadOf = https://code.byted.org/'
+assert_file_contains "$HOME/.gitconfig" 'directory = *'
+assert_file_contains "$HOME/.gitconfig" 'clean = git-lfs clean -- %f'
+assert_file_contains "$HOME/.tmux.conf" 'default-terminal "tmux-256color"'
+assert_file_contains "$HOME/.tmux.conf" 'mouse on'
+assert_file_contains "$HOME/.zsh_plugins.txt" 'Aloxaf/fzf-tab'
+assert_file_contains "$HOME/.zshrc" 'FZF_DEFAULT_COMMAND'
+assert_file_contains "$HOME/.zshrc" 'FZF_ALT_C_COMMAND'
+assert_file_contains "$HOME/.zshrc" 'brew --prefix fzf'
+assert_file_contains "$HOME/.zshrc" 'key-bindings.zsh'
+assert_file_contains "$HOME/.zshrc" 'completion.zsh'
+assert_file_contains "$HOME/.zshrc" 'codex()'
+assert_file_contains "$HOME/.zshrc" 'claude()'
+assert_file_contains "$HOME/.zshrc" '127.0.0.1:20170'
+assert_file_contains "$HOME/.zshrc" 'codex completion zsh'
+assert_file_contains "$HOME/.zshrc" '/opt/tiger/ss_bin'
+assert_file_contains "$HOME/.zshrc" '/opt/tiger/typhoon-blade'
+assert_file_contains "$HOME/.zshrc" 'CODEX_HOME'
+assert_file_contains "$HOME/.zshrc" '.zsh/completions'
+assert_file_contains "$HOME/.zshrc" 'zoxide init zsh'
+assert_file_contains "$HOME/.zsh_plugins.txt" 'ohmyzsh/ohmyzsh'
 
 phase "validate zsh non-interactive startup"
 run_step "zsh-non-interactive-smoke" zsh -c 'command -v brew >/dev/null && command -v zsh >/dev/null && command -v lazygit >/dev/null'

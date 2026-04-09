@@ -8,6 +8,11 @@ if [[ -f "$HOME/.config/shell/env" ]]; then
   . "$HOME/.config/shell/env"
 fi
 
+# --- completions ---
+fpath=("$HOME/.zsh/completions" $fpath)
+autoload -Uz compinit
+compinit -u
+
 # --- antidote plugin manager ---
 if command -v brew >/dev/null 2>&1; then
   antidote_file="$(brew --prefix antidote 2>/dev/null)/share/antidote/antidote.zsh"
@@ -17,9 +22,12 @@ if command -v brew >/dev/null 2>&1; then
   fi
 fi
 
-# --- completions ---
-autoload -Uz compinit
-compinit -u
+# --- fzf + fd ---
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+[[ -f "$(brew --prefix fzf)/shell/key-bindings.zsh" ]] && source "$(brew --prefix fzf)/shell/key-bindings.zsh"
+[[ -f "$(brew --prefix fzf)/shell/completion.zsh" ]] && source "$(brew --prefix fzf)/shell/completion.zsh"
 
 # --- pure prompt ---
 autoload -Uz promptinit
@@ -46,6 +54,9 @@ alias k='kinit --keychain zhongzegeng@BYTEDANCE.COM'
 # --- environment ---
 export LC_TIME="en_US.UTF-8"
 export EDITOR=vim
+{{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
+export CODEX_HOME="$HOME/.codex"
+{{- end }}
 
 {{ if eq .role "office" -}}
 # --- office proxy ---
@@ -61,6 +72,12 @@ unset_proxy() {
 }
 {{- end }}
 
+# --- zoxide (smart cd) ---
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+  alias j='z'
+fi
+
 # --- mise (language SDK manager) ---
 if command -v mise >/dev/null 2>&1; then
   eval "$(mise activate zsh)"
@@ -70,7 +87,35 @@ fi
 export PATH="$GOROOT/bin:$PATH"
 export PATH="$PATH:$GOPATH/bin"
 
+{{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
+# --- system PATH (office + linux) ---
+export PATH=/opt/tiger/ss_bin:$PATH
+export PATH=/opt/tiger/typhoon-blade:$PATH
+{{- end }}
+
 # --- completions (tools) ---
 if command -v gwq >/dev/null 2>&1; then
   source <(gwq completion zsh)
+fi
+
+# --- AI tools (proxy wrappers) ---
+{{ $proxy := "http://127.0.0.1:1088" -}}
+{{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
+{{   $proxy = "http://127.0.0.1:20170" -}}
+{{ end -}}
+codex() {
+  HTTP_PROXY={{ $proxy }} HTTPS_PROXY={{ $proxy }} \
+  http_proxy={{ $proxy }} https_proxy={{ $proxy }} \
+  command "${HOMEBREW_PREFIX}/bin/codex" "$@"
+}
+
+claude() {
+  HTTP_PROXY={{ $proxy }} HTTPS_PROXY={{ $proxy }} \
+  http_proxy={{ $proxy }} https_proxy={{ $proxy }} \
+  command "${HOMEBREW_PREFIX}/bin/claude" "$@"
+}
+
+# --- codex completion ---
+if command -v codex >/dev/null 2>&1; then
+  source <(codex completion zsh)
 fi
