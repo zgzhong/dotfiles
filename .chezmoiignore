@@ -1,0 +1,3 @@
+{{ if not (and (eq .role "office") (eq .chezmoi.os "linux")) }}
+.tmux.conf
+{{ end }}
