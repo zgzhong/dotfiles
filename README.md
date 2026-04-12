@@ -127,3 +127,17 @@ If the e2e run has already installed Homebrew formulae, `zsh` is also available:
 ```bash
 docker exec -it dotfiles-it-linux-office zsh
 ```
+
+## Integration test (Cold-boot via Docker)
+
+Run the cold-boot bootstrap test (bare container, no pre-installed chezmoi):
+
+```bash
+tests/integration/run-cold-boot.sh
+```
+
+Optional env vars:
+- `IMAGE_TAG`: docker image tag (default: `dotfiles-it:cold-boot`)
+- `DOTFILES_SRC`: source directory mounted to `/workspace` in the container
+- `CONTAINER_NAME`: docker container name (default: `dotfiles-it-cold-boot`)
+- `STATUS_FILE`: file inside the container used to store the e2e exit code (default: `/tmp/dotfiles-cold-boot.exitcode`)
