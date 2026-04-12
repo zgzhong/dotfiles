@@ -14,6 +14,29 @@ This repository is the `chezmoi` source state for managing 3 machines with share
 - Put machine-specific values in local `~/.config/chezmoi/chezmoi.toml`.
 
 ## Bootstrap
+
+One-liner for a fresh machine (requires `curl`):
+
+```bash
+curl -fsLS https://raw.githubusercontent.com/zgzhong/dotfiles/main/scripts/bootstrap.sh | bash
+```
+
+The script will:
+1. Install `chezmoi` to `~/.local/bin`
+2. Clone this repo
+3. Ask you to select a machine role (`office` or `home`)
+4. Generate `~/.config/chezmoi/chezmoi.toml`
+5. Run `chezmoi apply` (installs Homebrew, dev tools, shell config, etc.)
+
+For non-interactive use (CI, containers):
+
+```bash
+curl -fsLS https://raw.githubusercontent.com/zgzhong/dotfiles/main/scripts/bootstrap.sh | DOTFILES_ROLE=office bash
+```
+
+<details>
+<summary>Manual bootstrap (alternative)</summary>
+
 1. Install chezmoi on the target machine.
 2. Initialize from this repo:
    ```bash
@@ -32,6 +55,8 @@ This repository is the `chezmoi` source state for managing 3 machines with share
    chezmoi apply --dry-run
    chezmoi apply
    ```
+
+</details>
 
 ## Developer tools installation
 The old `~/.dotfiles/install.sh` tool installation is migrated to chezmoi scripts:

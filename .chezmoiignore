@@ -4,3 +4,4 @@
 {{ if ne .role "office" }}
 .local/bin/goproxy-token-check
 {{ end }}
+scripts/
