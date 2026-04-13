@@ -3,6 +3,17 @@
 
 [[ -o interactive ]] || return 0
 
+# --- options ---
+setopt AUTO_CD
+
+# --- history ---
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt SHARE_HISTORY          # 多个 session 实时共享历史
+setopt HIST_IGNORE_ALL_DUPS   # 去重
+setopt HIST_REDUCE_BLANKS     # 去除多余空格
+
 # Load chezmoi-managed environment variables (DOTFILES_ROLE, DOTFILES_OS, etc.)
 if [[ -f "$HOME/.config/shell/env" ]]; then
   . "$HOME/.config/shell/env"
@@ -53,7 +64,6 @@ alias k='kinit --keychain zhongzegeng@BYTEDANCE.COM'
 
 # --- environment ---
 export LC_TIME="en_US.UTF-8"
-export EDITOR=vim
 {{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
 export CODEX_HOME="$HOME/.codex"
 [[ -d "$CODEX_HOME" ]] || mkdir -p "$CODEX_HOME"
@@ -104,6 +114,7 @@ fi
 {{   $proxy = "http://127.0.0.1:20170" -}}
 {{ end -}}
 codex() {
+  EDITOR=vim \
   HTTP_PROXY={{ $proxy }} HTTPS_PROXY={{ $proxy }} \
   http_proxy={{ $proxy }} https_proxy={{ $proxy }} \
   command "${HOMEBREW_PREFIX}/bin/codex" "$@"
