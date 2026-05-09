@@ -20,6 +20,9 @@ elif [[ -x "$HOME/.linuxbrew/bin/brew" ]]; then
 fi
 {{- end }}
 
+# mise shims — available in all shells including non-interactive SSH
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
 # Go — shared binary directory across mise-managed Go versions
 export GOBIN="$HOME/go/bin"
 
