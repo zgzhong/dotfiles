@@ -5,7 +5,7 @@ set -euo pipefail
 {{ template "proxy-lib.sh.tmpl" . }}
 
 os="{{ .chezmoi.os }}"
-role="{{ .role | default "" }}"
+role="{{ index . "role" | default "" }}"
 
 setup_office_linux_proxy "$os" "$role"
 
@@ -33,6 +33,8 @@ common_formulae=(
   unar
   fzf
   fd
+  aria2
+  gh
 )
 
 # Common casks should be installed on both macOS and Linux.
@@ -42,6 +44,8 @@ common_casks=(
 )
 
 macos_formulae=(
+  cirruslabs/cli/tart
+  wget
 )
 
 macos_casks=(
@@ -49,6 +53,7 @@ macos_casks=(
   iterm2
   orbstack
   trae
+  keepassxc
 )
 
 formulae=("${common_formulae[@]}")

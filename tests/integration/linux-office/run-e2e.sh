@@ -27,6 +27,8 @@ FORMULAE=(
   unar
   fzf
   fd
+  aria2
+  gh
 )
 
 resolve_brew_shellenv_local() {

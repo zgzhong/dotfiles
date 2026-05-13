@@ -34,8 +34,8 @@ select_role() {
   # Interactive menu
   while true; do
     printf '\nSelect your machine role:\n'
-    printf '  1) office\n'
-    printf '  2) home\n'
+    printf '  1) office - work macOS or office Linux cloud dev\n'
+    printf '  2) home   - personal macOS, including Mac mini M4\n'
     printf 'Choice [1-2]: '
     read -r choice
     case "${choice}" in
@@ -92,5 +92,9 @@ generate_config
 apply_dotfiles
 
 printf '\n'
-log "dotfiles deployed (role=${ROLE})"
+case "${ROLE}" in
+  home) role_description="personal macOS / Mac mini M4" ;;
+  office) role_description="work macOS or office Linux cloud dev" ;;
+esac
+log "dotfiles deployed (role=${ROLE}, ${role_description})"
 log "Restart your shell or run: exec zsh"

@@ -3,4 +3,3 @@
 [data]
 # office | home
 role = "office"
-machine_name = "macbook-pro"

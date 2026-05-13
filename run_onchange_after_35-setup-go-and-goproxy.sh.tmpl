@@ -5,7 +5,7 @@ set -euo pipefail
 {{ template "proxy-lib.sh.tmpl" . }}
 
 os="{{ .chezmoi.os }}"
-role="{{ .role | default "" }}"
+role="{{ index . "role" | default "" }}"
 
 if [[ "$role" != "office" ]]; then
   echo "[chezmoi] goproxy setup is office-only, skipping"

@@ -1,27 +1,51 @@
-let mapleader=","
+" Minimal, lightweight beautification for Vim (no plugins)
+" Vim 轻量美化配置（不使用插件）
 
-nmap ; :
-" 默认使用系统剪切板功能
-noremap <Leader>y "*y
-noremap <Leader>p "*p
+set nocompatible                 " use Vim defaults / 使用 Vim 默认行为
 
-"窗口快捷导航
-nnoremap <C-l> <C-w>l
-nnoremap <C-h> <C-w>h
-nnoremap <C-k> <C-w>k
-nnoremap <C-j> <C-w>j
+" Keymaps / 快捷键
+let mapleader=","                " set leader key / 设置 Leader 键
+nmap ; :                         " ; enters command-line mode / ; 进入命令行模式
+noremap <Leader>y "*y            " yank to system clipboard / 复制到系统剪贴板
+noremap <Leader>p "*p            " paste from system clipboard / 从系统剪贴板粘贴
+nnoremap <C-h> <C-w>h            " move to left window / 切到左侧窗口
+nnoremap <C-j> <C-w>j            " move to below window / 切到下方窗口
+nnoremap <C-k> <C-w>k            " move to above window / 切到上方窗口
+nnoremap <C-l> <C-w>l            " move to right window / 切到右侧窗口
 
+" Visuals / 视觉效果
+syntax on                        " enable syntax highlight / 启用语法高亮
+set number                       " show line numbers / 显示行号
+set cursorline                   " highlight current line / 高亮当前行
+set cursorcolumn                 " highlight current column / 高亮当前列
+set showcmd                      " show partial command / 显示命令输入
+set ruler                        " show cursor position / 显示光标位置
+set wildmenu                     " command-line completion menu / 命令补全菜单
+set wildmode=longest:full,full   " complete to longest, then list / 先补到最长再列出
+set termguicolors                " true-color support / 真彩色支持
+set background=dark              " prefer dark theme / 使用深色背景
 
-" ===== 个性化配置
-" 开启行号
-set number
-" 语法高亮
-syntax enable
-set background=dark
+" Theme / 主题
+colorscheme evening              " built-in theme / 内置主题
 
-" 十字光标
-set cursorline cursorcolumn
-" 代码换行
-set nowrap
-" 搜索高亮
-set hlsearch
+" UI tweaks / 界面小优化
+set laststatus=2                 " always show statusline / 总是显示状态栏
+set showmode                     " show mode (e.g. --INSERT--) / 显示模式
+set nowrap                       " don't wrap lines / 不自动换行
+set scrolloff=3                  " keep 3 lines above/below cursor / 光标上下保留3行
+
+" Indentation / 缩进
+set expandtab                    " tabs -> spaces / Tab 转空格
+set shiftwidth=2                 " indent width / 缩进宽度
+set tabstop=2                    " visual tab width / Tab 显示宽度
+set softtabstop=2                " backspace removes 2 spaces / 退格按2空格
+
+" Search / 搜索
+set ignorecase                   " case-insensitive search / 忽略大小写
+set smartcase                    " case-sensitive if uppercase / 大写时区分大小写
+set incsearch                    " incremental search / 增量搜索
+set hlsearch                     " highlight matches / 高亮匹配
+
+" File handling / 文件
+set hidden                       " allow switching buffers w/o save / 允许不保存切换
+set updatetime=300               " faster CursorHold (ms) / 缩短触发延迟
