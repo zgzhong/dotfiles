@@ -4,7 +4,7 @@ set -euo pipefail
 {{ template "proxy-lib.sh.tmpl" . }}
 
 os="{{ .chezmoi.os }}"
-role="{{ .role | default "" }}"
+role="{{ index . "role" | default "" }}"
 
 setup_office_linux_proxy "$os" "$role"
 

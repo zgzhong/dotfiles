@@ -1,5 +1,6 @@
 # shellcheck shell=zsh
 # Managed by chezmoi. Interactive zsh configuration.
+{{- $role := (index . "role" | default "") }}
 
 [[ -o interactive ]] || return 0
 
@@ -56,7 +57,7 @@ alias gerp='grep'
 alias lg='lazygit'
 alias vi='vim'
 
-{{ if eq .role "office" -}}
+{{ if eq $role "office" -}}
 # --- office-only aliases ---
 alias s='ssh -K zhongzegeng@BYTEDANCE.COM'
 alias k='kinit --keychain zhongzegeng@BYTEDANCE.COM'
@@ -64,12 +65,12 @@ alias k='kinit --keychain zhongzegeng@BYTEDANCE.COM'
 
 # --- environment ---
 export LC_TIME="en_US.UTF-8"
-{{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
+{{ if and (eq $role "office") (eq .chezmoi.os "linux") -}}
 export CODEX_HOME="$HOME/.codex"
 [[ -d "$CODEX_HOME" ]] || mkdir -p "$CODEX_HOME"
 {{- end }}
 
-{{ if eq .role "office" -}}
+{{ if eq $role "office" -}}
 # --- office proxy ---
 export no_proxy="localhost,.byted.org,byted.org,.bytedance.net,bytedance.net,.byteintl.net,byteintl.net,127.0.0.1,127.0.0.0/8,169.254.0.0/16,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8,::1,fe80::/10,fd00::/8"
 
@@ -80,6 +81,18 @@ set_proxy() {
 
 unset_proxy() {
   unset http_proxy https_proxy no_proxy
+}
+{{- end }}
+
+{{ if and (eq $role "home") (eq .chezmoi.os "darwin") -}}
+# --- home macOS proxy ---
+set_proxy() {
+  export http_proxy=http://127.0.0.1:1088
+  export https_proxy=http://127.0.0.1:1088
+}
+
+unset_proxy() {
+  unset http_proxy https_proxy
 }
 {{- end }}
 
@@ -97,7 +110,7 @@ fi
 # --- PATH ---
 export PATH="$GOBIN:$PATH"
 
-{{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
+{{ if and (eq $role "office") (eq .chezmoi.os "linux") -}}
 # --- system PATH (office + linux) ---
 export PATH=/opt/tiger/ss_bin:$PATH
 export PATH=/opt/tiger/typhoon-blade:$PATH
@@ -110,7 +123,7 @@ fi
 
 # --- AI tools (proxy wrappers) ---
 {{ $proxy := "http://127.0.0.1:1088" -}}
-{{ if and (eq .role "office") (eq .chezmoi.os "linux") -}}
+{{ if and (eq $role "office") (eq .chezmoi.os "linux") -}}
 {{   $proxy = "http://127.0.0.1:20170" -}}
 {{ end -}}
 codex() {
@@ -126,7 +139,7 @@ claude() {
   command "${HOMEBREW_PREFIX}/bin/claude" "$@"
 }
 
-{{ if eq .role "office" -}}
+{{ if eq $role "office" -}}
 # --- goproxy token auto-renewal ---
 [[ -x "$HOME/.local/bin/goproxy-token-check" ]] && "$HOME/.local/bin/goproxy-token-check"
 {{- end }}

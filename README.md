@@ -1,17 +1,18 @@
 # dotfiles with chezmoi
 
-This repository is the `chezmoi` source state for managing 3 machines with shared defaults and role-based differences.
+This repository is the `chezmoi` source state for managing personal and work machines with shared defaults and role/OS-based differences.
 
 ## Machine model
-- `home`: mac mini m4 (macOS)
-- `office`: mac book pro (macOS)
-- `office`: cloud dev machine (Debian Linux)
+- `home` + `darwin`: personal Mac mini M4 (macOS)
+- `office` + `darwin`: work MacBook Pro (macOS)
+- `office` + `linux`: cloud dev machine (Debian Linux)
 
 ## Design rules
 - Keep most configs shared across all machines.
 - Encode differences with `role` (`office` / `home`) and OS (`darwin` / `linux`).
 - Never commit sensitive values.
-- Put machine-specific values in local `~/.config/chezmoi/chezmoi.toml`.
+- Put local private values in `~/.config/chezmoi/chezmoi.toml`.
+- The only required local data field today is `data.role`.
 
 ## Bootstrap
 
@@ -71,25 +72,35 @@ Common (`brew --formula`, macOS + Linux):
 - `eza`
 - `bat`
 - `zsh`
-- `autojump`
+- `zoxide`
 - `antidote`
 - `lazygit`
-- `goenv`
-- `pyenv`
+- `mise`
+- `d-kuro/tap/gwq`
 - `jq`
 - `htop`
 - `zstd`
 - `vim`
 - `unar`
+- `fzf`
+- `fd`
+- `aria2`
+- `gh`
 
 Common (`brew --cask`, macOS + Linux):
 - `codex`
+- `claude-code@latest`
+
+macOS only (`brew --formula`):
+- `cirruslabs/cli/tart`
+- `wget`
 
 macOS only (`brew --cask`):
 - `visual-studio-code`
 - `iterm2`
 - `orbstack`
 - `trae`
+- `keepassxc`
 
 ## Migration from stow
 Use incremental migration. Move one config family at a time.

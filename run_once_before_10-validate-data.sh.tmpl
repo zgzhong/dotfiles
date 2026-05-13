@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-role="{{ .role | default "" }}"
+role="{{ index . "role" | default "" }}"
 
 if [[ -z "$role" ]]; then
   echo "[chezmoi] ERROR: data.role is required in ~/.config/chezmoi/chezmoi.toml" >&2

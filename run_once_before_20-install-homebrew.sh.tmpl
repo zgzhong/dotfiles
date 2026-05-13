@@ -5,7 +5,7 @@ set -euo pipefail
 {{ template "proxy-lib.sh.tmpl" . }}
 
 os="{{ .chezmoi.os }}"
-role="{{ .role | default "" }}"
+role="{{ index . "role" | default "" }}"
 
 install_linux_brew_dependencies() {
   if [[ "$os" != "linux" ]]; then

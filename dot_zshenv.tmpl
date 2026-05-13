@@ -1,5 +1,6 @@
 # shellcheck shell=zsh
 # Managed by chezmoi. Sourced by every zsh invocation (login, interactive, scripts).
+{{- $role := (index . "role" | default "") }}
 
 # Locale
 export LANG="en_US.UTF-8"
@@ -31,7 +32,7 @@ export RUSTUP_DIST_SERVER="https://rsproxy.cn"
 export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
-{{ if eq .role "office" -}}
+{{ if eq $role "office" -}}
 # local bin
 export PATH="$HOME/.local/bin:$PATH"
 {{- end }}
