@@ -1,5 +1,7 @@
 # Cold Boot: One-Line Dotfiles Bootstrap
 
+> **Status:** Frozen design snapshot from 2026-04-12. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 ## Summary
 
 Add a minimal cold-boot mechanism so a brand-new machine (macOS or Debian Linux)

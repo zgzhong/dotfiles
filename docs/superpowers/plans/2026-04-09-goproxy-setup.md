@@ -1,5 +1,7 @@
 # Goproxy Setup Implementation Plan
 
+> **Status:** Frozen design snapshot from 2026-04-09. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Install goproxy_setup_cli, configure Go proxy env vars via mise-managed Go, and auto-check JWT token expiry on interactive shell startup (office only).
