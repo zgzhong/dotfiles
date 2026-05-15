@@ -99,7 +99,6 @@ macOS only (`brew --cask`):
 - `visual-studio-code`
 - `iterm2`
 - `orbstack`
-- `trae`
 - `keepassxc`
 
 ## Migration from stow
