@@ -1,5 +1,7 @@
 # mise & aliases Implementation Plan
 
+> **Status:** Frozen design snapshot from 2026-04-07. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace pyenv/goenv with mise for language SDK management, and sync aliases + shell config into chezmoi-managed `dot_zshrc.tmpl` with role-based conditionals.

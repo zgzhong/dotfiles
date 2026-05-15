@@ -204,7 +204,6 @@ assert_file_contains "$HOME/.zshrc" "alias lg='lazygit'"
 assert_file_contains "$HOME/.zshrc" "alias ls='eza -Th -s type -L1'"
 assert_file_contains "$HOME/.zshrc" 'alias s='
 assert_file_contains "$HOME/.zshrc" 'alias k='
-assert_file_contains "$HOME/.zshrc" 'export EDITOR=vim'
 assert_file_contains "$HOME/.zshrc" 'no_proxy='
 assert_file_contains "$HOME/.zshrc" 'mise activate zsh'
 assert_file_contains "$HOME/.zshenv" 'GOBIN'

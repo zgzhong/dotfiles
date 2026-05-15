@@ -1,5 +1,7 @@
 # Replace pyenv/goenv with mise & sync aliases
 
+> **Status:** Frozen design snapshot from 2026-04-07. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 ## Goal
 
 1. Replace `pyenv` and `goenv` with `mise` as the unified language SDK manager.

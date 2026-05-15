@@ -1,5 +1,7 @@
 # Zsh: antidote + pure prompt 配置设计
 
+> **Status:** Frozen design snapshot from 2026-04-06. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 ## 概述
 
 使用 antidote 作为 zsh 插件管理器，sindresorhus/pure 作为 prompt 主题，替代 powerlevel10k，保持简洁轻量。

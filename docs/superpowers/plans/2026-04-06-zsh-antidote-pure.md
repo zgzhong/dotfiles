@@ -1,5 +1,7 @@
 # Zsh antidote + pure prompt 实现计划
 
+> **Status:** Frozen design snapshot from 2026-04-06. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 配置 antidote 插件管理器加载 pure prompt 和常用 zsh 插件，并更新 E2E 测试覆盖。

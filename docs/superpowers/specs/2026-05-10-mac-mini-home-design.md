@@ -1,5 +1,7 @@
 # Mac mini M4 home/darwin dotfiles design
 
+> **Status:** Frozen design snapshot from 2026-05-10. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 ## Goal
 
 Adjust this chezmoi dotfiles repository so the current Mac mini M4 can be represented cleanly as the personal home macOS machine. The repository changes should make a future bootstrap/init produce the intended `home + darwin` target state, without migrating the current local machine during this design/implementation cycle.

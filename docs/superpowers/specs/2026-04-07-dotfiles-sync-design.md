@@ -1,5 +1,7 @@
 # Dotfiles Sync — 将 Home 目录 Dotfiles 集成到 Chezmoi 仓库
 
+> **Status:** Frozen design snapshot from 2026-04-07. Implementation has since landed and the code may have drifted from this document. Source of truth: repo source + `README.md` + `docs/machines.md`. See [`docs/superpowers/README.md`](../README.md).
+
 **日期**: 2026-04-07
 **状态**: 设计确认
 
