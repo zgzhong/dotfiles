@@ -39,7 +39,7 @@ if command -v brew >/dev/null 2>&1; then
   exit 0
 fi
 
-setup_office_linux_proxy "$os" "$role"
+setup_install_proxy "$os" "$role"
 install_linux_brew_dependencies
 
 echo "[chezmoi] Installing Homebrew on $os..."
