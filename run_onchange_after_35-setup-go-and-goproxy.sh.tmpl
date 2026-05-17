@@ -12,7 +12,7 @@ if [[ "$role" != "office" ]]; then
   exit 0
 fi
 
-setup_office_linux_proxy "$os" "$role"
+setup_install_proxy "$os" "$role"
 
 if ! resolve_brew_shellenv "$os"; then
   echo "[chezmoi] brew not found, cannot proceed" >&2

@@ -7,7 +7,7 @@ set -euo pipefail
 os="{{ .chezmoi.os }}"
 role="{{ index . "role" | default "" }}"
 
-setup_office_linux_proxy "$os" "$role"
+setup_install_proxy "$os" "$role"
 
 if ! resolve_brew_shellenv "$os"; then
   echo "[chezmoi] brew not found. Run chezmoi apply again after Homebrew is installed." >&2

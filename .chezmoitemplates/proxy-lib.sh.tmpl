@@ -1,19 +1,30 @@
 # Shared proxy helper functions for chezmoi run scripts.
+# Proxy addresses kept aligned with dot_zshrc.tmpl.
 
-setup_office_linux_proxy() {
+setup_install_proxy() {
   local target_os="${1:-}"
   local target_role="${2:-}"
+  local proxy=""
+  local no_proxy_value=""
 
-  if [[ "$target_os" == "linux" && "$target_role" == "office" ]]; then
-    export http_proxy="http://sys-proxy-rd-relay.byted.org:8118"
-    export https_proxy="http://sys-proxy-rd-relay.byted.org:8118"
-    export no_proxy=".byted.org"
+  if [[ "$target_role" == "office" ]]; then
+    # office+linux and office+darwin share the byted relay (matches zshrc office block).
+    proxy="http://sys-proxy-rd-relay.byted.org:8118"
+    no_proxy_value=".byted.org"
+  elif [[ "$target_role" == "home" && "$target_os" == "darwin" ]]; then
+    proxy="http://127.0.0.1:1088"
+  fi
+
+  if [[ -n "$proxy" ]]; then
+    export http_proxy="$proxy"
+    export https_proxy="$proxy"
+    [[ -n "$no_proxy_value" ]] && export no_proxy="$no_proxy_value"
 
     # Keep uppercase aliases for tools that don't read lowercase vars.
     export HTTP_PROXY="$http_proxy"
     export HTTPS_PROXY="$https_proxy"
-    export NO_PROXY="$no_proxy"
+    [[ -n "$no_proxy_value" ]] && export NO_PROXY="$no_proxy"
 
-    echo "[chezmoi] office+linux detected, proxy exported for network operations"
+    echo "[chezmoi] $target_role+$target_os detected, proxy exported ($proxy)"
   fi
 }

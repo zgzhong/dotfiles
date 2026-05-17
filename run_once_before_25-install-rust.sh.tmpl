@@ -6,7 +6,7 @@ set -euo pipefail
 os="{{ .chezmoi.os }}"
 role="{{ index . "role" | default "" }}"
 
-setup_office_linux_proxy "$os" "$role"
+setup_install_proxy "$os" "$role"
 
 # Rust mirrors (China mainland acceleration)
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"
