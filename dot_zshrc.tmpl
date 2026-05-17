@@ -139,6 +139,20 @@ claude() {
   command "${HOMEBREW_PREFIX}/bin/claude" "$@"
 }
 
+{{ $brew_proxy := "" -}}
+{{ if eq $role "office" -}}
+{{   $brew_proxy = "http://sys-proxy-rd-relay.byted.org:8118" -}}
+{{ else if and (eq $role "home") (eq .chezmoi.os "darwin") -}}
+{{   $brew_proxy = "http://127.0.0.1:1088" -}}
+{{ end -}}
+{{ if ne $brew_proxy "" -}}
+brew() {
+  HTTP_PROXY={{ $brew_proxy }} HTTPS_PROXY={{ $brew_proxy }} \
+  http_proxy={{ $brew_proxy }} https_proxy={{ $brew_proxy }} \
+  command brew "$@"
+}
+{{- end }}
+
 {{ if eq $role "office" -}}
 # --- goproxy token auto-renewal ---
 [[ -x "$HOME/.local/bin/goproxy-token-check" ]] && "$HOME/.local/bin/goproxy-token-check"
