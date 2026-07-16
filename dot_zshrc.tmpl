@@ -121,8 +121,9 @@ export PATH="$GOBIN:$PATH"
 
 {{ if and (eq $role "office") (eq .chezmoi.os "linux") -}}
 # --- system PATH (office + linux) ---
-export PATH=/opt/tiger/ss_bin:$PATH
-export PATH=/opt/tiger/typhoon-blade:$PATH
+# Appended, not prepended: ss_bin ships same-named wrappers (gh, tcpdump,
+# zstd, doas) that must not shadow the brew/system versions.
+export PATH=$PATH:/opt/tiger/ss_bin:/opt/tiger/typhoon-blade
 {{- end }}
 
 # --- completions (tools) ---
