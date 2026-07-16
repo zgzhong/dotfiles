@@ -29,6 +29,7 @@ FORMULAE=(
   fd
   aria2
   gh
+  direnv
 )
 
 resolve_brew_shellenv_local() {
@@ -231,6 +232,7 @@ assert_file_contains "$HOME/.zshrc" '/opt/tiger/typhoon-blade'
 assert_file_contains "$HOME/.zshrc" 'CODEX_HOME'
 assert_file_contains "$HOME/.zshrc" '.zsh/completions'
 assert_file_contains "$HOME/.zshrc" 'zoxide init zsh'
+assert_file_contains "$HOME/.zshrc" 'direnv hook zsh'
 assert_file_contains "$HOME/.zsh_plugins.txt" 'ohmyzsh/ohmyzsh'
 assert_file_contains "$HOME/.zshrc" 'goproxy-token-check'
 assert_file_exists "$HOME/.local/bin/goproxy-token-check"
