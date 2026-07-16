@@ -224,6 +224,8 @@ assert_file_contains "$HOME/.zshrc" 'brew --prefix fzf'
 assert_file_contains "$HOME/.zshrc" 'key-bindings.zsh'
 assert_file_contains "$HOME/.zshrc" 'completion.zsh'
 assert_file_contains "$HOME/.zshrc" 'codex()'
+assert_file_contains "$HOME/.zshrc" 'command codex "$@"'
+assert_file_not_contains "$HOME/.zshrc" "command \"\${HOMEBREW_PREFIX}/bin/codex\" \"\$@\""
 assert_file_contains "$HOME/.zshrc" 'claude()'
 assert_file_contains "$HOME/.zshrc" '127.0.0.1:20170'
 assert_file_contains "$HOME/.zshrc" 'codex completion zsh'
