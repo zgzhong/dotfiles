@@ -56,9 +56,9 @@ alias grep="rg --color=auto -glob='!.{.bzr,git,hg,idea,vscode}'"
 alias gerp='grep'
 alias lg='lazygit'
 alias vi='vim'
-opus()    { claude --model "claude-opus-4-7[1m]" --effort "${1:-high}"   "${@:2}" }
-opus46()  { claude --model "claude-opus-4-6[1m]" --effort "${1:-high}"   "${@:2}" }
-sonnet()  { claude --model claude-sonnet-4-6     --effort "${1:-medium}" "${@:2}" }
+opus48()  { claude --model "opus[1m]" --effort "${1:-high}"   "${@:2}" }
+opus()    { claude --model "claude-opus-4-6[1m]" --effort "${1:-high}"   "${@:2}" }
+sonnet()  { claude --model claude-sonnet-5     --effort "${1:-medium}" "${@:2}" }
 haiku()   { claude --model claude-haiku-4-5      --effort "${1:-medium}" "${@:2}" }
 
 {{ if eq $role "office" -}}
@@ -132,8 +132,6 @@ fi
 {{ end -}}
 codex() {
   EDITOR=vim \
-  HTTP_PROXY={{ $proxy }} HTTPS_PROXY={{ $proxy }} \
-  http_proxy={{ $proxy }} https_proxy={{ $proxy }} \
   command "${HOMEBREW_PREFIX}/bin/codex" "$@"
 }
 
@@ -145,7 +143,7 @@ claude() {
 
 {{ $brew_proxy := "" -}}
 {{ if eq $role "office" -}}
-{{   $brew_proxy = "http://sys-proxy-rd-relay.byted.org:8118" -}}
+{{   $brew_proxy = "http://127.0.0.1:20170" -}}
 {{ else if and (eq $role "home") (eq .chezmoi.os "darwin") -}}
 {{   $brew_proxy = "http://127.0.0.1:1088" -}}
 {{ end -}}
