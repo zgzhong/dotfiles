@@ -131,6 +131,13 @@ if command -v gwq >/dev/null 2>&1; then
   source <(gwq completion zsh)
 fi
 
+# Completion plus the `wt cd` shell integration. The help line guards against
+# an unrelated binary named wt.
+if command -v wt >/dev/null 2>&1 \
+  && [[ "$(wt --help 2>/dev/null | head -1)" == "thin workspace worktree manager" ]]; then
+  source <(wt completion zsh)
+fi
+
 # --- AI tools (proxy wrappers) ---
 {{ $proxy := "http://127.0.0.1:1088" -}}
 {{ if and (eq $role "office") (eq .chezmoi.os "linux") -}}
