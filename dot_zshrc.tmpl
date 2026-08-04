@@ -56,8 +56,8 @@ alias grep="rg --color=auto -glob='!.{.bzr,git,hg,idea,vscode}'"
 alias gerp='grep'
 alias lg='lazygit'
 alias vi='vim'
-opus48()  { claude --model "opus[1m]" --effort "${1:-high}"   "${@:2}" }
-opus()    { claude --model "claude-opus-4-6[1m]" --effort "${1:-high}"   "${@:2}" }
+opus()  { claude --model "opus[1m]" --effort "${1:-high}"   "${@:2}" }
+opus46()    { claude --model "claude-opus-4-6[1m]" --effort "${1:-high}"   "${@:2}" }
 sonnet()  { claude --model claude-sonnet-5     --effort "${1:-medium}" "${@:2}" }
 haiku()   { claude --model claude-haiku-4-5      --effort "${1:-medium}" "${@:2}" }
 
@@ -151,7 +151,7 @@ codex() {
 claude() {
   HTTP_PROXY={{ $proxy }} HTTPS_PROXY={{ $proxy }} \
   http_proxy={{ $proxy }} https_proxy={{ $proxy }} \
-  command "${HOMEBREW_PREFIX}/bin/claude" "$@"
+  command claude "$@"
 }
 
 {{ $brew_proxy := "" -}}
