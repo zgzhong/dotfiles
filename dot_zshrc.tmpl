@@ -138,6 +138,10 @@ if command -v wt >/dev/null 2>&1 \
   source <(wt completion zsh)
 fi
 
+if command -v bitsut-cli >/dev/null 2>&1; then
+  source <(bitsut-cli completion zsh)
+fi
+
 # --- AI tools (proxy wrappers) ---
 {{ $proxy := "http://127.0.0.1:1088" -}}
 {{ if and (eq $role "office") (eq .chezmoi.os "linux") -}}
