@@ -30,6 +30,7 @@ FORMULAE=(
   aria2
   gh
   direnv
+  mycli
 )
 
 resolve_brew_shellenv_local() {
