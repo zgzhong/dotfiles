@@ -227,6 +227,10 @@ assert_file_contains "$HOME/.zshrc" 'completion.zsh'
 assert_file_contains "$HOME/.zshrc" 'codex()'
 assert_file_contains "$HOME/.zshrc" 'command codex "$@"'
 assert_file_not_contains "$HOME/.zshrc" "command \"\${HOMEBREW_PREFIX}/bin/codex\" \"\$@\""
+CODEX_FUNCTION="$(sed -n '/^codex() {$/,/^}$/p' "$HOME/.zshrc")"
+if [[ "$CODEX_FUNCTION" == *"PROXY="* || "$CODEX_FUNCTION" == *"proxy="* ]]; then
+  fail "Codex wrapper should not set HTTP proxy variables"
+fi
 assert_file_contains "$HOME/.zshrc" 'claude()'
 assert_file_contains "$HOME/.zshrc" '127.0.0.1:20170'
 assert_file_contains "$HOME/.zshrc" 'codex completion zsh'
