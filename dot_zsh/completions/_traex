@@ -1,0 +1,10 @@
+#compdef traex
+
+if [[ -z ${_TRAEX_COMPLETION_LOADED:-} ]]; then
+  _TRAEX_COMPLETION_LOADED=1
+  if (( $+commands[traex] )); then
+    source <(traex completion zsh)
+  fi
+fi
+
+_traecli "$@"

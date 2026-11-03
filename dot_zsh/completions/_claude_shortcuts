@@ -1,0 +1,11 @@
+#compdef opus opus46 sonnet haiku
+
+_claude_shortcuts() {
+  if (( CURRENT == 2 )); then
+    _values effort low medium high xhigh max
+  else
+    _default
+  fi
+}
+
+_claude_shortcuts "$@"
