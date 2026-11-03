@@ -1,0 +1,22 @@
+#compdef trae-opus trae-gpt6.1-sol trae-dsv4.1-flash
+
+_trae_shortcuts() {
+  local -a reasoning=(low medium high)
+  local -a contexts=(standard max)
+  [[ $words[1] == trae-opus ]] && reasoning+=(xhigh max)
+  [[ $words[1] == trae-gpt6.1-sol ]] && reasoning+=(xhigh)
+  if (( CURRENT == 2 )); then
+    _values 'reasoning effort' $reasoning
+    return
+  elif (( CURRENT == 3 )); then
+    _values context $contexts
+    return
+  fi
+
+  local -a shortcut_words=("${(@)words[4,-1]}")
+  words=(traecli "${shortcut_words[@]}")
+  local CURRENT=$(( CURRENT - 2 ))
+  _traex "$@"
+}
+
+_trae_shortcuts "$@"
